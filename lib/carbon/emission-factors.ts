@@ -173,11 +173,21 @@ export const DEFAULT_CREDIT_PRICE_USD = 15;
  * @returns true if project emissions are strictly below the regional baseline
  */
 export function isAdditional(projectEmissionsPerYear: number, region: string): boolean {
-  const baseline = REGIONAL_PER_CAPITA_EMISSIONS[region];
-  if (baseline === undefined) {
+  if (!Number.isFinite(projectEmissionsPerYear) || projectEmissionsPerYear < 0) {
+    throw new Error(`Invalid project emissions value: ${projectEmissionsPerYear}`);
+  }
+  const baseline = getRegionalBaseline(region);
+  return projectEmissionsPerYear < baseline;
+}
+
+/**
+ * Safely looks up a regional per-capita baseline, ignoring inherited object keys.
+ */
+function getRegionalBaseline(region: string): number {
+  if (!Object.prototype.hasOwnProperty.call(REGIONAL_PER_CAPITA_EMISSIONS, region)) {
     throw new Error(`Unknown region for additionality baseline: ${region}`);
   }
-  return projectEmissionsPerYear < baseline;
+  return REGIONAL_PER_CAPITA_EMISSIONS[region];
 }
 
 /**
@@ -185,9 +195,8 @@ export function isAdditional(projectEmissionsPerYear: number, region: string): b
  * Positive values indicate reductions below baseline.
  */
 export function baselineReduction(projectEmissionsPerYear: number, region: string): number {
-  const baseline = REGIONAL_PER_CAPITA_EMISSIONS[region];
-  if (baseline === undefined) {
-    throw new Error(`Unknown region for additionality baseline: ${region}`);
+  if (!Number.isFinite(projectEmissionsPerYear) || projectEmissionsPerYear < 0) {
+    throw new Error(`Invalid project emissions value: ${projectEmissionsPerYear}`);
   }
-  return baseline - projectEmissionsPerYear;
+  return getRegionalBaseline(region) - projectEmissionsPerYear;
 }

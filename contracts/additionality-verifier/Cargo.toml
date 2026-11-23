@@ -14,6 +14,7 @@ baseline-emissions = { path = "../baseline-emissions" }
 
 [dev-dependencies]
 soroban-sdk = { version = "27.0.6", features = ["testutils", "alloc"] }
+baseline-emissions = { path = "../baseline-emissions" }
 
 [profile.release]
 opt-level = "z"

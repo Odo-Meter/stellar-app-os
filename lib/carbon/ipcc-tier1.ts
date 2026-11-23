@@ -24,6 +24,11 @@
  * Additionality: a project's claimed sequestration is only credited if it exceeds
  * the regional baseline (business-as-usual) sequestration that would have occurred
  * without the carbon-credit incentive. See `assessAdditionality` below.
+ *
+ * Baseline comparison: the project's annual sequestration is compared against the
+ * regional business-as-usual rate scaled to the project area. The baseline must be
+ * supplied by the caller (from the regional reference dataset); this module does not
+ * invent baseline values.
  */
 import { CLIMATE_FACTORS, TREE_SPECIES, type ClimateZone } from '@/lib/constants/species';
 import type { TreeSpecies } from '@/lib/types/tree';
